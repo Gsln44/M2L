@@ -8,7 +8,7 @@
 response.logo = "M2L"
 
 response.title = "M2L"
-response.subtitle = 'Maison des Ligues de Lorraine'
+response.subtitle = 'Maison des Ligues de Guadeloupe'
 
 ## read more at http://dev.w3.org/html5/markup/meta.name.html
 response.meta.author = 'Maelle Taurand'
