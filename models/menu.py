@@ -7,7 +7,7 @@
 
 response.logo = "M2L"
 
-response.title = "M2L"
+response.title = "M2LCHICKENFURIOUS"
 response.subtitle = 'Maison des Ligues de Guadeloupe'
 
 ## read more at http://dev.w3.org/html5/markup/meta.name.html
