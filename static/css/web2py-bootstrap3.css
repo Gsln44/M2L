@@ -47,6 +47,16 @@ div.flash.alert {
     background-color: #f9edbe;
     border-color: #f0c36d;
 }
+div.flash.alert2 {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    right: 75px;
+    cursor: pointer;
+    z-index: 1000;
+    background-color: #f9edbe;
+    border-color: #f0c36d;
+}
 .w2p-toolbar-hidden {
     margin: 10px;
 }
