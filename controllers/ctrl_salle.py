@@ -68,7 +68,8 @@ def demanderReservationSalle():
                        error_message='doit être au format DD-MM-YYYY HH:MM!')]),
         Field('DateFin','datetime', requires=[IS_NOT_EMPTY(),IS_DATETIME(format=T('%d-%m-%Y %H:%M'),
                        error_message='doit être au format DD-MM-YYYY HH:MM!')]),
-        Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s'))
+        Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s')),
+        Field('NbParticipants','integer',requires=[IS_NOT_EMPTY()])
         ,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
 
 
@@ -129,6 +130,7 @@ def rechercherSalleDisponible():
     dateDebDdeR = request.vars['DateDebut']
     dateFinDdeR = request.vars['DateFin']
     categSalleRecherchee = request.vars['Categorie']
+    nbParticipant=request.vars['NbParticipants']
 
 
     #les salles disponibles sont :

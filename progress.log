@@ -422,3 +422,7 @@
 [2016-03-15 17:02:06] EDIT M2L/models/menu.py: 0
 >>>>>>> 851d62295c388372be6048a200b0396fdc4cc215
 [2016-03-15 17:11:08] EDIT M2L/views/layout.html: -1
+[2016-03-15 17:41:33] EDIT M2L/controllers/ctrl_salle.py: 1
+[2016-03-15 17:42:09] EDIT M2L/controllers/ctrl_salle.py: 0
+[2016-03-15 17:43:08] EDIT M2L/controllers/ctrl_salle.py: 0
+[2016-03-15 17:44:09] EDIT M2L/controllers/ctrl_salle.py: 1
