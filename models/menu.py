@@ -7,11 +7,11 @@
 
 response.logo = "M2L"
 
-response.title = "M2LCHICKENFURIOUS"
-response.subtitle = 'Maison des Ligues de Guadeloupe'
+response.title = "M2L"
+response.subtitle = 'Maison des Ligues de Lorraine'
 
 ## read more at http://dev.w3.org/html5/markup/meta.name.html
-response.meta.author = 'Joel Gros Desir'
+response.meta.author = 'Steven, Nolan, Dylan'
 response.meta.description = 'Portail de la maison des Ligues de Lorraine'
 response.meta.keywords = 'Ligues, Lorraine, Sport, Rhum'
 response.meta.generator = 'Portail de la maison des Ligues de Lorraine'
