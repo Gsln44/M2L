@@ -406,3 +406,11 @@
 [2016-01-08 16:10:21] EDIT M2L_PPE2/controllers/ctrl_salle.py: 0
 [2016-01-08 16:25:28] EDIT M2L_PPE2/models/db_resa_salle.py: 0
 [2016-01-08 16:27:50] EDIT M2L_PPE2/models/db_resa_salle.py: 0
+[2016-03-15 14:17:55] EDIT M2L/models/db.py: 0
+[2016-03-15 14:18:33] EDIT M2L/models/db.py: 0
+[2016-03-15 14:18:35] EDIT M2L/models/db.py: 0
+[2016-03-15 14:18:35] EDIT M2L/models/db.py: 0
+[2016-03-15 14:34:53] EDIT M2L/views/default/user.html: 0
+[2016-03-15 14:36:50] EDIT M2L/views/default/user.html: 0
+[2016-03-15 14:36:53] EDIT M2L/views/default/user.html: 0
+[2016-03-15 14:36:56] EDIT M2L/views/default/user.html: 0
