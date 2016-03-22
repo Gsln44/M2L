@@ -63,6 +63,7 @@
 'Disk Cache Keys': 'Clés de cache du disque',
 'Disk Cleared': 'Disque vidé',
 'Documentation': 'Documentation',
+'doit être au format D-MM-YYYY HH:MM!': 'doit être au format D-MM-YYYY HH:MM!',
 'doit être au format DD-MM-YYYY HH:MM!': 'doit être au format DD-MM-YYYY HH:MM!',
 "Don't know what to do?": 'Vous ne savez pas quoi faire?',
 'done!': 'fait !',

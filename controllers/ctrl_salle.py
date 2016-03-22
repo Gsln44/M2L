@@ -131,18 +131,26 @@ def rechercherSalleDisponible():
     dateFinDdeR = request.vars['DateFin']
     categSalleRecherchee = request.vars['Categorie']
     nbParticipant=request.vars['NbParticipants']
+	if dateDebDdeR > dateFinDdeR :
 
+        redirect(URL('ctrl_salle','demanderReservationSalle'))
 
-    #les salles disponibles sont :
-    # celles qui appartiennent à la catégorie recherchée
-    # qui ont des heures d'ouverture et de fermeture adaptés  
-    # et qui sont libres pour la période de réservation demandée
+        message = 'La date de fin ne peut pas être antérieure à la date de début'
 
-    # réalisation d'une sous-requête : les salles qui sont libres pour la période de réservation demandée
-    rowsSallesDispo1 = db((((db.reservation.dateDebut<dateDebDdeR) & (db.reservation.dateFin>dateDebDdeR))|((db.reservation.dateDebut<dateFinDdeR)&(db.reservation.dateFin>dateFinDdeR))))._select(db.reservation.salle_id)
+         
 
-    #rowsSallesDispo =db(~db.salle.id.belongs(rowsSallesDispo1)).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
-    rowsSallesDispo=db((~db.salle.id.belongs(rowsSallesDispo1))).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
+    else :
+
+		#les salles disponibles sont :
+		# celles qui appartiennent à la catégorie recherchée
+		# qui ont des heures d'ouverture et de fermeture adaptés  
+		# et qui sont libres pour la période de réservation demandée
+
+		# réalisation d'une sous-requête : les salles qui sont libres pour la période de réservation demandée
+		rowsSallesDispo1 = db((((db.reservation.dateDebut<dateDebDdeR) & (db.reservation.dateFin>dateDebDdeR))|((db.reservation.dateDebut<dateFinDdeR)&(db.reservation.dateFin>dateFinDdeR))))._select(db.reservation.salle_id)
+
+		#rowsSallesDispo =db(~db.salle.id.belongs(rowsSallesDispo1)).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
+		rowsSallesDispo=db((~db.salle.id.belongs(rowsSallesDispo1))).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
 
    
     return locals()
@@ -167,7 +175,7 @@ def reserver():
     return locals()
 
 #------------------------------------------------------------------------------------#
-# visualiserReservation
+# visualiserReservation 
 #------------------------------------------------------------------------------------#
 @auth.requires_login()
 def visualiserReservation():
