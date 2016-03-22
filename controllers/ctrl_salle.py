@@ -61,6 +61,9 @@ def demanderReservationSalle():
     """
     Fournit à la vue un formulaire de demande de réservation
     """
+    
+    if request.vars['origin'] == 'controleDate':
+        response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
 
     #création du formulaire de reservation
     form = SQLFORM.factory(
@@ -131,13 +134,11 @@ def rechercherSalleDisponible():
     dateFinDdeR = request.vars['DateFin']
     categSalleRecherchee = request.vars['Categorie']
     nbParticipant=request.vars['NbParticipants']
-	if dateDebDdeR > dateFinDdeR :
-
-        redirect(URL('ctrl_salle','demanderReservationSalle'))
-
-        message = 'La date de fin ne peut pas être antérieure à la date de début'
-
-         
+    
+    
+    if dateDebDdeR > dateFinDdeR :
+        response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
+        redirect(URL('ctrl_salle','demanderReservationSalle',vars=dict({'origin':'controleDate'})))
 
     else :
 
