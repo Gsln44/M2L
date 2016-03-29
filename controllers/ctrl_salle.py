@@ -61,19 +61,25 @@ def demanderReservationSalle():
     """
     Fournit à la vue un formulaire de demande de réservation
     """
-    
     if request.vars['origin'] == 'controleDate':
         response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
-
-    #création du formulaire de reservation
+    if request.vars['origin'] == 'controleDateJour':
+        response.flash = 'La date de début ne peut pas être antérieure à la date du jour'
+    
+    #form = SQLFORM.factory(Field('DateDebut','datetime',requires=[IS_NOT_EMPTY()]),
+                               #Field('DateFin','datetime', requires=[IS_NOT_EMPTY()]),
+                               #Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s')),
+                               #Field('NbParticipants','integer',requires=[IS_NOT_EMPTY()])
+        #,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
+#création du formulaire de reservation
     form = SQLFORM.factory(
         Field('DateDebut','datetime',requires=[IS_NOT_EMPTY(),IS_DATETIME(format=T('%d-%m-%Y %H:%M'),
-                       error_message='doit être au format DD-MM-YYYY HH:MM!')]),
+                 error_message='doit être au format DD-MM-YYYY HH:MM!')]),
         Field('DateFin','datetime', requires=[IS_NOT_EMPTY(),IS_DATETIME(format=T('%d-%m-%Y %H:%M'),
-                       error_message='doit être au format DD-MM-YYYY HH:MM!')]),
+               error_message='doit être au format DD-MM-YYYY HH:MM!')]),
         Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s')),
         Field('NbParticipants','integer',requires=[IS_NOT_EMPTY()])
-        ,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
+    ,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
 
 
     if form.validate():
@@ -129,29 +135,36 @@ def rechercherSalleDisponible():
     """
     Fournit à la vue la liste des salles disponibles à partir des données du formulaire de demande de réservation
     """
+    
     # récupération des variables du formulaire transmises par la rêquete HTTP
     dateDebDdeR = request.vars['DateDebut']
     dateFinDdeR = request.vars['DateFin']
     categSalleRecherchee = request.vars['Categorie']
     nbParticipant=request.vars['NbParticipants']
     
+    import datetime
+    date=datetime.datetime.today()
+    date_object = datetime.datetime.strptime(dateDebDdeR,'%Y-%m-%d %H:%M:%S')
+    if date_object < date:
+        response.flash = 'La date de début ne peut pas être antérieure à la date du jour'
+        redirect(URL('ctrl_salle','demanderReservationSalle',vars=dict({'origin':'controleDateJour'})))
+    else:
+        if dateDebDdeR > dateFinDdeR :
+            response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
+            redirect(URL('ctrl_salle','demanderReservationSalle',vars=dict({'origin':'controleDate'})))
     
-    if dateDebDdeR > dateFinDdeR :
-        response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
-        redirect(URL('ctrl_salle','demanderReservationSalle',vars=dict({'origin':'controleDate'})))
+        else :
 
-    else :
+            #les salles disponibles sont :
+            # celles qui appartiennent à la catégorie recherchée
+            # qui ont des heures d'ouverture et de fermeture adaptés  
+            # et qui sont libres pour la période de réservation demandée
 
-		#les salles disponibles sont :
-		# celles qui appartiennent à la catégorie recherchée
-		# qui ont des heures d'ouverture et de fermeture adaptés  
-		# et qui sont libres pour la période de réservation demandée
+            # réalisation d'une sous-requête : les salles qui sont libres pour la période de réservation demandée
+            rowsSallesDispo1 = db((((db.reservation.dateDebut<dateDebDdeR) & (db.reservation.dateFin>dateDebDdeR))|((db.reservation.dateDebut<dateFinDdeR)&(db.reservation.dateFin>dateFinDdeR))))._select(db.reservation.salle_id)
 
-		# réalisation d'une sous-requête : les salles qui sont libres pour la période de réservation demandée
-		rowsSallesDispo1 = db((((db.reservation.dateDebut<dateDebDdeR) & (db.reservation.dateFin>dateDebDdeR))|((db.reservation.dateDebut<dateFinDdeR)&(db.reservation.dateFin>dateFinDdeR))))._select(db.reservation.salle_id)
-
-		#rowsSallesDispo =db(~db.salle.id.belongs(rowsSallesDispo1)).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
-		rowsSallesDispo=db((~db.salle.id.belongs(rowsSallesDispo1))).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
+            #rowsSallesDispo =db(~db.salle.id.belongs(rowsSallesDispo1)).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
+            rowsSallesDispo=db((~db.salle.id.belongs(rowsSallesDispo1))).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
 
    
     return locals()
