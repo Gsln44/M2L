@@ -435,6 +435,7 @@
 [2016-03-22 15:04:30] EDIT M2L/controllers/ctrl_salle.py: 0
 [2016-03-22 15:07:43] EDIT M2L/controllers/ctrl_salle.py: 0
 [2016-03-22 15:08:29] EDIT M2L/views/ctrl_salle/index.html: 0
+<<<<<<< HEAD
 [2016-03-22 16:41:24] EDIT M2L/controllers/ctrl_salle.py: 4
 [2016-03-22 16:44:56] EDIT M2L/controllers/ctrl_salle.py: 0
 [2016-03-22 16:46:11] EDIT M2L/controllers/ctrl_salle.py: 0
@@ -495,3 +496,6 @@
 [2016-03-29 15:56:27] EDIT M2L/controllers/ctrl_salle.py: 2
 [2016-03-29 15:58:14] EDIT M2L/controllers/ctrl_salle.py: -3
 [2016-03-29 16:40:51] EDIT M2L/controllers/ctrl_salle.py: 8
+=======
+[2016-03-29 15:55:03] EDIT M2L/controllers/ctrl_salle.py: 0
+>>>>>>> 23547f686bf311bdca592dca0598238270c4c71d
