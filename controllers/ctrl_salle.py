@@ -88,7 +88,7 @@ def demanderReservationSalle():
         redirect(URL('ctrl_salle','rechercherSalleDisponible',vars=form.vars))
 
     elif form.errors:
-        response.flash = 'Le formulaire contient des erreurs'
+        response.flash = 'Valeur manquante'
 
     return locals()
 
