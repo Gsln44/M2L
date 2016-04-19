@@ -200,6 +200,6 @@ def visualiserReservation():
     dateRecherchee = datetime.strptime(request.vars['date'],"%Y-%m-%d") # transformation en datetime de la chaine de caractère transmise via URL
 
     # requête de sélection des réservations correspondant à la date choisie
-    rowsResa=db((((db.reservation.dateDebut.year() == dateRecherchee.year) & (db.reservation.dateDebut.day() == dateRecherchee.day) & (db.reservation.dateDebut.month() == dateRecherchee.month))|((db.reservation.dateFin.year() == dateRecherchee.year) & (db.reservation.dateFin.day() == dateRecherchee.day) & (db.reservation.dateFin.month() == dateRecherchee.month)))).select(db.reservation.ALL)
-    
+    rowsResa=db((db.reservation.salle_id==db.salle.id)&((((db.reservation.dateDebut.year() == dateRecherchee.year) & (db.reservation.dateDebut.day() == dateRecherchee.day) & (db.reservation.dateDebut.month() == dateRecherchee.month))|((db.reservation.dateFin.year() == dateRecherchee.year) & (db.reservation.dateFin.day() == dateRecherchee.day) & (db.reservation.dateFin.month() == dateRecherchee.month))))).select(db.reservation.ALL, db.salle.nom)
+
     return locals()
