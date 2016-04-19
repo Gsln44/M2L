@@ -33,7 +33,7 @@ def afficherSallesCategorie():
 #------------------------------------------------------------------------------------#
 # ajouterSalle
 #------------------------------------------------------------------------------------#
-@auth.requires_login()
+@auth.requires_membership('administrateur')
 def ajouterSalle():
     """
     Fournit à la vue un formulaire d'ajout de salle

@@ -99,6 +99,7 @@
 'Informations sur la M2L': 'Informations sur la M2L',
 'insert new': 'insérer un nouveau',
 'insert new %s': 'insérer un nouveau %s',
+'Insufficient privileges': 'Insufficient privileges',
 'Internal State': 'État interne',
 'Intranet': 'Intranet',
 'Introduction': 'Introduction',
