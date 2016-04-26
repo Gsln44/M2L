@@ -10,12 +10,7 @@
 '%Y-%m-%d': '%d-%m-%Y',
 '%Y-%m-%d %H:%M': '%d-%m-%Y %H:%M',
 '%Y-%m-%d %H:%M:%S': '%d-%m-%Y %H:%M:%S',
-<<<<<<< HEAD
-'@markmin\x01An error occured, please [[reload %s]] the page': 'An error occured, please [[reload %s]] the page',
-'@markmin\x01Number of entries: **%s**': 'Number of entries: **%s**',
-=======
 '@markmin\x01An error occured, please [[reload %s]] the page': "Une erreur est survenue, s'il vous plait [[reload %s]] la page",
->>>>>>> 7e198794714169382b33299a7b278f5d7487d4af
 'About': 'À propos',
 'Access Control': "Contrôle d'accès",
 'Actualités sportives de la presse': 'Actualités sportives de la presse',
@@ -23,7 +18,6 @@
 'Administrative Interface': "Interface d'administration",
 'Ajax Recipes': 'Recettes Ajax',
 'appadmin is disabled because insecure channel': "appadmin est désactivée parce que le canal n'est pas sécurisé",
-'Apply changes': 'Apply changes',
 'Are you sure you want to delete this object?': 'Êtes-vous sûr de vouloir supprimer cet objet?',
 'Authentication': 'Authentification',
 'Available Databases and Tables': 'Bases de données et tables disponibles',
@@ -92,7 +86,6 @@
 'Forms and Validators': 'Formulaires et Validateurs',
 'Free Applications': 'Applications gratuites',
 'Function disabled': 'Fonction désactivée',
-'Graph Model': 'Graph Model',
 'Group ID': 'Groupe ID',
 'Groups': 'Groupes',
 'Hello World': 'Bonjour le monde',
@@ -159,14 +152,8 @@
 'Powered by': 'Alimenté par',
 'previous 100 rows': '100 lignes précédentes',
 'Privilèges insuffisants': 'Privilèges insuffisants',
-<<<<<<< HEAD
-'Profile': 'Profile',
-'Profile updated': 'Profile updated',
-=======
 'Profile': 'Profil',
->>>>>>> 7e198794714169382b33299a7b278f5d7487d4af
 'Présentation': 'Présentation',
-'pygraphviz library not found': 'pygraphviz library not found',
 'Python': 'Python',
 'Query:': 'Requête:',
 'Quick Examples': 'Exemples Rapides',
@@ -211,13 +198,8 @@
 'This is a copy of the scaffolding application': "Ceci est une copie de l'application échafaudage",
 'Time in Cache (h:m:s)': 'Temps en Cache (h:m:s)',
 'Timestamp': 'Horodatage',
-<<<<<<< HEAD
-'Too short': 'Too short',
-'Traceback': 'Traceback',
-=======
 'Too short': 'Trop court',
 'Traceback': 'Retour',
->>>>>>> 7e198794714169382b33299a7b278f5d7487d4af
 'Twitter': 'Twitter',
 'unable to parse csv file': "incapable d'analyser le fichier cvs",
 'Update:': 'Mise à jour:',
