@@ -6,7 +6,7 @@ def afficherLesSalles():
     """
     Fournit à la vue HTML la liste de toutes les salles avec l'ensemble des informations
     """
-    rowsSalles =db(db.salle.categorie_id==db.categorie.id).select(db.salle.id,db.salle.nom,db.categorie.nom) #requête permettant de récupérer les informations des salles
+    rowsSalles =db(db.salle.categorie_id==db.categorie.id).select(db.salle.id,db.salle.nom,db.categorie.nom, db.salle.capacite, db.categorie.heureOuvertureMinutes,db.categorie.heureOuverture,orderby=db.categorie.nom|db.salle.capacite)      #requête permettant de récupérer les informations des salles
 
     return locals()
 
@@ -33,7 +33,7 @@ def afficherSallesCategorie():
 #------------------------------------------------------------------------------------#
 # ajouterSalle
 #------------------------------------------------------------------------------------#
-@auth.requires_login()
+@auth.requires_membership('administrateur')
 def ajouterSalle():
     """
     Fournit à la vue un formulaire d'ajout de salle
@@ -61,15 +61,25 @@ def demanderReservationSalle():
     """
     Fournit à la vue un formulaire de demande de réservation
     """
-
-    #création du formulaire de reservation
+    if request.vars['origin'] == 'controleDate':
+        response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
+    if request.vars['origin'] == 'controleDateJour':
+        response.flash = 'La date de début ne peut pas être antérieure à la date du jour'
+    
+    #form = SQLFORM.factory(Field('DateDebut','datetime',requires=[IS_NOT_EMPTY()]),
+                               #Field('DateFin','datetime', requires=[IS_NOT_EMPTY()]),
+                               #Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s')),
+                               #Field('NbParticipants','integer',requires=[IS_NOT_EMPTY()])
+        #,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
+#création du formulaire de reservation
     form = SQLFORM.factory(
         Field('DateDebut','datetime',requires=[IS_NOT_EMPTY(),IS_DATETIME(format=T('%d-%m-%Y %H:%M'),
-                       error_message='doit être au format DD-MM-YYYY HH:MM!')]),
+                 error_message='doit être au format DD-MM-YYYY HH:MM!')]),
         Field('DateFin','datetime', requires=[IS_NOT_EMPTY(),IS_DATETIME(format=T('%d-%m-%Y %H:%M'),
-                       error_message='doit être au format DD-MM-YYYY HH:MM!')]),
-        Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s'))
-        ,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
+               error_message='doit être au format DD-MM-YYYY HH:MM!')]),
+        Field('Categorie',db.categorie,requires=IS_IN_DB(db,db.categorie.id,'%(nom)s')),
+        Field('NbParticipants','integer',requires=[IS_NOT_EMPTY()])
+    ,labels = {'DateDebut':'Date de début ','DateFin':'Date de fin ','NbParticipants':'Nombre de participants '})
 
 
     if form.validate():
@@ -78,7 +88,7 @@ def demanderReservationSalle():
         redirect(URL('ctrl_salle','rechercherSalleDisponible',vars=form.vars))
 
     elif form.errors:
-        response.flash = 'Le formulaire contient des erreurs'
+        response.flash = 'Valeur manquante'
 
     return locals()
 
@@ -125,22 +135,36 @@ def rechercherSalleDisponible():
     """
     Fournit à la vue la liste des salles disponibles à partir des données du formulaire de demande de réservation
     """
+    
     # récupération des variables du formulaire transmises par la rêquete HTTP
     dateDebDdeR = request.vars['DateDebut']
     dateFinDdeR = request.vars['DateFin']
     categSalleRecherchee = request.vars['Categorie']
+    nbParticipant=request.vars['NbParticipants']
+    
+    import datetime
+    date=datetime.datetime.today()
+    date_object = datetime.datetime.strptime(dateDebDdeR,'%Y-%m-%d %H:%M:%S')
+    if date_object < date:
+        response.flash = 'La date de début ne peut pas être antérieure à la date du jour'
+        redirect(URL('ctrl_salle','demanderReservationSalle',vars=dict({'origin':'controleDateJour'})))
+    else:
+        if dateDebDdeR > dateFinDdeR :
+            response.flash = 'La date de fin ne peut pas être antérieure à la date de début'
+            redirect(URL('ctrl_salle','demanderReservationSalle',vars=dict({'origin':'controleDate'})))
+    
+        else :
 
+            #les salles disponibles sont :
+            # celles qui appartiennent à la catégorie recherchée
+            # qui ont des heures d'ouverture et de fermeture adaptés  
+            # et qui sont libres pour la période de réservation demandée
 
-    #les salles disponibles sont :
-    # celles qui appartiennent à la catégorie recherchée
-    # qui ont des heures d'ouverture et de fermeture adaptés  
-    # et qui sont libres pour la période de réservation demandée
+            # réalisation d'une sous-requête : les salles qui sont libres pour la période de réservation demandée
+            rowsSallesDispo1 = db((((db.reservation.dateDebut<dateDebDdeR) & (db.reservation.dateFin>dateDebDdeR))|((db.reservation.dateDebut<dateFinDdeR)&(db.reservation.dateFin>dateFinDdeR))))._select(db.reservation.salle_id)
 
-    # réalisation d'une sous-requête : les salles qui sont libres pour la période de réservation demandée
-    rowsSallesDispo1 = db((((db.reservation.dateDebut<dateDebDdeR) & (db.reservation.dateFin>dateDebDdeR))|((db.reservation.dateDebut<dateFinDdeR)&(db.reservation.dateFin>dateFinDdeR))))._select(db.reservation.salle_id)
-
-    #rowsSallesDispo =db(~db.salle.id.belongs(rowsSallesDispo1)).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
-    rowsSallesDispo=db((~db.salle.id.belongs(rowsSallesDispo1))).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
+            #rowsSallesDispo =db(~db.salle.id.belongs(rowsSallesDispo1)).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
+            rowsSallesDispo=db((~db.salle.id.belongs(rowsSallesDispo1))).select(db.salle.id,db.salle.nom,db.salle.capacite,distinct=True)
 
    
     return locals()
@@ -165,7 +189,7 @@ def reserver():
     return locals()
 
 #------------------------------------------------------------------------------------#
-# visualiserReservation
+# visualiserReservation 
 #------------------------------------------------------------------------------------#
 @auth.requires_login()
 def visualiserReservation():
@@ -173,9 +197,9 @@ def visualiserReservation():
     Fournit à la vue la liste des réservations correspondant à la date sélectionnée.
     """
     from datetime import datetime
-    dateRecherchee = datetime.strptime(request.vars['date'],"%d-%m-%Y") # transformation en datetime de la chaine de caractère transmise via URL
+    dateRecherchee = datetime.strptime(request.vars['date'],"%Y-%m-%d") # transformation en datetime de la chaine de caractère transmise via URL
 
     # requête de sélection des réservations correspondant à la date choisie
-    rowsResa=db((((db.reservation.dateDebut.year() == dateRecherchee.year) & (db.reservation.dateDebut.day() == dateRecherchee.day) & (db.reservation.dateDebut.month() == dateRecherchee.month))|((db.reservation.dateFin.year() == dateRecherchee.year) & (db.reservation.dateFin.day() == dateRecherchee.day) & (db.reservation.dateFin.month() == dateRecherchee.month)))).select(db.reservation.ALL)
-    
+    rowsResa=db((db.reservation.salle_id==db.salle.id)&((((db.reservation.dateDebut.year() == dateRecherchee.year) & (db.reservation.dateDebut.day() == dateRecherchee.day) & (db.reservation.dateDebut.month() == dateRecherchee.month))|((db.reservation.dateFin.year() == dateRecherchee.year) & (db.reservation.dateFin.day() == dateRecherchee.day) & (db.reservation.dateFin.month() == dateRecherchee.month))))).select(db.reservation.ALL, db.salle.nom)
+
     return locals()
